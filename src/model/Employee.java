@@ -44,11 +44,11 @@ public class Employee {
 			while(rs.next()) {
 				int empid = rs.getInt("employeeID");
 				int posid = rs.getInt("positionID");
-				String name = rs.getString("empName");
-				String status = rs.getString("empStatus");
+				String name = rs.getString("name");
+				String status = rs.getString("status");
 				int salary = rs.getInt("salary");
-				String empuser = rs.getString("empUsername");
-				String emppass = rs.getString("empPassword");
+				String empuser = rs.getString("username");
+				String emppass = rs.getString("password");
 				
 				Employee emp = new Employee(empid, posid, name, status, salary, empuser, emppass);
 				emps.add(emp);

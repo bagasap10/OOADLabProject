@@ -32,7 +32,7 @@ public class employeeView extends JFrame implements MouseListener, ActionListene
 		con = new Connect();
 		northPanel = new JPanel();
 		southPanel = new JPanel();
-		centerPanel = new JPanel(new GridLayout(8,2));
+		centerPanel = new JPanel(new GridLayout(8,5));
 
 		employeeID = new JLabel("employeeID");
 		positionID = new JLabel("positionID");
@@ -61,7 +61,7 @@ public class employeeView extends JFrame implements MouseListener, ActionListene
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int empID = Integer.parseInt(employeeIDField.getText());
+//				int empID = Integer.parseInt(employeeIDField.getText());
 				int positionID = Integer.parseInt(positionIDField.getText());
 				String empName = empNameField.getText();
 				String empStatus = empStatusField.getText();
@@ -202,7 +202,7 @@ public class employeeView extends JFrame implements MouseListener, ActionListene
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(1280,720);
 		setLocationRelativeTo(null);
-		this.setTitle("Product List");
+		this.setTitle("Employee List");
 		this.setVisible(true);
 	}
 
@@ -223,7 +223,7 @@ public class employeeView extends JFrame implements MouseListener, ActionListene
 				int positionID = con.rs.getInt("positionID");
 				String empName = con.rs.getString("name");
 				String empStatus = con.rs.getString("status");
-				int salary = Integer.parseInt(salaryField.getText());
+				int salary = con.rs.getInt("salary");
 				String empUsername = con.rs.getString("username");
 				String empPassword = con.rs.getString("password");
 
@@ -253,6 +253,7 @@ public class employeeView extends JFrame implements MouseListener, ActionListene
 		Vector<Employee> employees = EmployeeHandler.getAllEmployees();
 
 		for (Employee employee : employees) {
+			rowData = new Vector<>();
 			rowData.add(employee.getEmployeeID());
 			rowData.add(employee.getPositionID());
 			rowData.add(employee.getEmployeeName());
@@ -260,7 +261,6 @@ public class employeeView extends JFrame implements MouseListener, ActionListene
 			rowData.add(employee.getSalary());
 			rowData.add(employee.getEmployeeUsername());
 			rowData.add(employee.getEmployeePassword());
-
 			dtm.addRow(rowData);
 		}
 
