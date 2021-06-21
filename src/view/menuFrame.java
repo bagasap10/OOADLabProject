@@ -15,7 +15,6 @@ public class menuFrame extends JFrame implements MenuListener, ActionListener {
 	JMenuItem insertMenu, manageMenu, viewMenu;
 	JSeparator separator1;
 	productView viewIntFrame;
-	insertIntFrame insertIntFrame;
 	
 	public menuFrame() {
 		menuBar = new JMenuBar();
@@ -30,7 +29,7 @@ public class menuFrame extends JFrame implements MenuListener, ActionListener {
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Employee");
 				dispose();
-				new employeeView();
+				new homeHRDView();
 				
 			}
 		});
@@ -42,11 +41,8 @@ public class menuFrame extends JFrame implements MenuListener, ActionListener {
 		viewMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("View Menu 2\n");
-				if(viewIntFrame != null) {
-					viewIntFrame.dispose();
-				}
-				add(viewIntFrame = new productView());
+				dispose();
+				new homeProductAdminView();
 			}
 		});
 		
@@ -73,21 +69,7 @@ public class menuFrame extends JFrame implements MenuListener, ActionListener {
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		if(e.getSource() == insertMenu) {
-			System.out.println("Insert menu\n");
-			if(insertIntFrame != null) {
-				insertIntFrame.dispose();
-			}
-			add(insertIntFrame = new insertIntFrame());
-		}
-		
-		if(e.getSource() == manageMenu) {
-			System.out.println("Manage menu\n");
-		}
-		if(e.getSource() == viewMenu) {
-			System.out.println("View menu\n");
-		}
+
 	}
 	@Override
 	public void menuSelected(MenuEvent e) {

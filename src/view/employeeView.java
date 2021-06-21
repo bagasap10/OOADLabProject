@@ -15,8 +15,8 @@ import controller.ProductHandler;
 import model.Employee;
 import model.Product;
 
-public class employeeView extends JFrame implements MouseListener, ActionListener {
-
+public class employeeView extends JInternalFrame implements MouseListener, ActionListener {
+		
 	JPanel northPanel, southPanel, centerPanel;
 	JTable table;
 	DefaultTableModel dtm;
@@ -28,8 +28,11 @@ public class employeeView extends JFrame implements MouseListener, ActionListene
 	Connect con;
 
 	public employeeView() {
-
+		this.setTitle("Manage Employee Menu");
+		this.setVisible(true);
+		this.setClosable(true);
 		con = new Connect();
+				
 		northPanel = new JPanel();
 		southPanel = new JPanel();
 		centerPanel = new JPanel(new GridLayout(8,5));
@@ -130,13 +133,6 @@ public class employeeView extends JFrame implements MouseListener, ActionListene
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				int empID = Integer.parseInt(employeeIDField.getText());
-				int positionID = Integer.parseInt(positionIDField.getText());
-				String empName = empNameField.getText();
-				String empStatus = empStatusField.getText();
-				int salary = Integer.parseInt(salaryField.getText());
-				String empUsername = empUsernameField.getText();
-				String empPassword = empPasswordField.getText();
-
 
 				boolean status = EmployeeHandler.fireEmployee(empID);
 				if(status) {					
@@ -198,12 +194,6 @@ public class employeeView extends JFrame implements MouseListener, ActionListene
 		this.add(northPanel,BorderLayout.NORTH);
 		this.add(southPanel,BorderLayout.SOUTH);
 		this.add(centerPanel,BorderLayout.CENTER);
-		setResizable(false);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(1280,720);
-		setLocationRelativeTo(null);
-		this.setTitle("Employee List");
-		this.setVisible(true);
 	}
 
 	public void genTable() {
