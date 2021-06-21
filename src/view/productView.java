@@ -150,14 +150,7 @@ public class productView extends JInternalFrame implements MouseListener, Action
 
 		scrollPane = new JScrollPane(table);
 
-		northPanel.add(scrollPane);
-
-		//		southPanel.add(id);
-		southPanel.add(name);
-		southPanel.add(desc);
-		southPanel.add(price);
-		southPanel.add(stock);
-
+//		northPanel.add(scrollPane);
 		northPanel.add(scrollPane);
 		centerPanel.add(id);
 		centerPanel.add(idField);

@@ -12,7 +12,6 @@ public class Employee {
 	
 	//Instance Fields
 	private int employeeID;
-	private int empRoleID;
 	private int positionID;
 	private String empName;
 	private String empStatus;
@@ -21,11 +20,9 @@ public class Employee {
 	private String empPassword;
 	
 
-	public Employee() {
-		// TODO Auto-generated constructor stub
+	public Employee(int employeeID, int positionID, String empName, String empStatus, int salary, String empUsername, String empPassword) {
 		super();
 		this.employeeID = employeeID;
-		this.empRoleID = empRoleID;
 		this.positionID = positionID;
 		this.empName = empName;
 		this.empStatus = empStatus;
@@ -34,106 +31,103 @@ public class Employee {
 		this.empPassword = empPassword;
 	}
 
-	public Employee insertEmployee() {
-		Employee employee = new Employee();
-		
-		try{
-			String query = String.format("INSERT INTO Employee (roleID, name, username, salary, status, password) VALUES ('%d', '%s', '%s', '%d', '%s', '%s')", empRoleID, empName, empUsername, salary, empStatus, empPassword);
-			con.stat.execute(query);
-		}
-		catch(Exception e) {
-			return null;
-		}
-		return employee;
+	public Employee() {
+		// TODO Auto-generated constructor stub
+
 	}
 	
-	public boolean insert() {
-		PreparedStatement ps = Connect.getInstance().prepareStatement("INSERT INTO Employee VALUES");
-		ps.setString(parameterIndex, x);
-		
-		ps.executeUpdate();
-		
-	}
-	
-	public static List<Employee> getAllEmployees() {
-		
-		List<Employee> listEmployee = new ArrayList<Employee>();
-		
+	public Vector<Employee> getAllEmployees(){
+		Vector<Employee> emps = new Vector<>();
 		try {
-			con.rs = con.execQuery("SELECT * FROM Employee");
-			
-			while(con.rs.next() == true) {
-				Employee employee = new Employee();
-				
-				employee.setEmployeeID(con.rs.getInt("ID"));
-				employee.setEmployeeRoleID(con.rs.getInt("roleID"));
-				employee.setEmployeeName(con.rs.getString("name"));
-				employee.setEmployeeUsername(con.rs.getString("username"));
-				employee.setSalary(con.rs.getInt("Salary"));
-				employee.setEmployeeStatus(con.rs.getString("status"));
-				employee.setEmployeePassword(con.rs.getString("password"));
-				
-			}
-		}
-		
-		catch (Exception e) {
-			return null;
-		}
-		
-		return listEmployee;
-		
-	}
-	
-	public static Employee getEmployee(int employeeID) {
-		Employee employee = new Employee();
-		
-		try {
-			con.rs = con.execQuery("SELECT * FROM Employee WHERE ID = " + employeeID);
-			
-			if(con.rs.next() == true) {
-				employee.setEmployeeID(con.rs.getInt("ID"));
-				employee.setEmployeeRoleID(con.rs.getInt("roleID"));
-				employee.setEmployeeName(con.rs.getString("name"));
-				employee.setEmployeeUsername(con.rs.getString("username"));
-				employee.setSalary(con.rs.getInt("salary"));
-				employee.setEmployeeStatus(con.rs.getString("status"));
-				employee.setEmployeePassword(con.rs.getString("password"));
-			}
-		}
-		
-		catch(Exception e) {
-			return null;
-		}
-		return employee;
-	}
-	
-	public Employee updateEmployee() {
-		Employee employee = new Employee();
-		try {
-			PreparedStatement ps = con.prepareStatement("UPDATE Employee SET roleID=?, name=?, username=?, salary=?, status=?, password=? WHERE id=?");
+			PreparedStatement ps = Connect.getInstance().prepareStatement("SELECT * FROM employee");
 			ResultSet rs = ps.executeQuery();
-			
-			ps.setInt(1, empRoleID);
+			while(rs.next()) {
+				int empid = rs.getInt("employeeID");
+				int posid = rs.getInt("positionID");
+				String name = rs.getString("empName");
+				String status = rs.getString("empStatus");
+				int salary = rs.getInt("salary");
+				String empuser = rs.getString("empUsername");
+				String emppass = rs.getString("empPassword");
+				
+				Employee emp = new Employee(empid, posid, name, status, salary, empuser, emppass);
+				emps.add(emp);
+			}
+			return emps;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public Employee getEmployee() {
+		try {
+			PreparedStatement ps = Connect.getInstance().prepareStatement("SELECT * FROM product WHERE productID = ?");
+			ps.setInt(1, employeeID);
+
+			Employee emp = new Employee();
+			return emp;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public boolean insertEmployee() {
+		try {
+			PreparedStatement ps = Connect.getInstance().prepareStatement("INSERT INTO employee VALUES(null,?,?,?,?,?,?)");
+			ps.setInt(1, positionID);
 			ps.setString(2, empName);
-			ps.setString(3, empUsername);
+			ps.setString(3, empStatus);
 			ps.setInt(4, salary);
-			ps.setString(5, empStatus);
+			ps.setString(5, empUsername);
 			ps.setString(6, empPassword);
+			
+			
+
+			return ps.executeUpdate() == 1;
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		catch(Exception e) {
-			return null;
+		return false;
+	}
+
+	public boolean updateEmployee() {
+		try {
+			PreparedStatement ps = Connect.getInstance().prepareStatement("UPDATE employee SET positionID = ?, name= ?, status = ?, salary= ?, username = ?, password = ? WHERE employeeID = ?");
+			ps.setInt(1, positionID);
+			ps.setString(2, empName);
+			ps.setString(3, empStatus);
+			ps.setInt(4, salary);
+			ps.setString(5, empUsername);
+			ps.setString(6, empPassword);
+			ps.setInt(7, employeeID);
+
+			return ps.executeUpdate() == 1;
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		return employee;
+		return false;
+	}
+
+	public boolean fireEmployee() {
+		try {
+			PreparedStatement ps = Connect.getInstance().prepareStatement("DELETE FROM employee WHERE employeeID = ?");
+			ps.setInt(1,employeeID);
+
+			return ps.executeUpdate() == 1;
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return false;
 	}
 	
-	public boolean update() {
-		PreparedStatement ps = Connect.getInstance().prepareStatement("UPDATE Employee SET roleID=?, name=?, username=?, salary=?, status=?, password=? WHERE id=?");
-		ps.setInt(1, employeeID);
-	}
 	
-	public boolean fireEmployee(int employeeID) {
-		
-	}
 	
 	public int getEmployeeID() {
 		return employeeID;
@@ -141,14 +135,6 @@ public class Employee {
 
 	public void setEmployeeID(int employeeID) {
 		this.employeeID = employeeID;
-	}
-
-	public int getEmployeeRoleID() {
-		return empRoleID;
-	}
-
-	public void setEmployeeRoleID(int empRoleID) {
-		this.empRoleID = empRoleID;
 	}
 
 	public int getSalary() {
@@ -198,17 +184,4 @@ public class Employee {
 	public void setPositionID(int positionID) {
 		this.positionID = positionID;
 	}
-	
-	public List<Employee> getAll(){
-		List<Employee> employee = new List<>();
-		
-		try {
-			PreparedStatement ps = Connect.getInstance().prepared
-		}
-		
-		}
-	
-
-	
-	
 }

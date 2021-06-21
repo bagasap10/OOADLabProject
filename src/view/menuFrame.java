@@ -23,8 +23,17 @@ public class menuFrame extends JFrame implements MenuListener, ActionListener {
 		logoutMenu = new JMenu("Logout");
 		logoutMenu.addMenuListener(this);
 		
-		insertMenu = new JMenuItem("Insert Menu");
-		insertMenu.addActionListener(this);
+		insertMenu = new JMenuItem("Employee Menu");
+		insertMenu.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Employee");
+				dispose();
+				new employeeView();
+				
+			}
+		});
 		
 		manageMenu = new JMenuItem("Manage Menu");
 		manageMenu.addActionListener(this);

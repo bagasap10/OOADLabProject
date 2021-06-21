@@ -3,55 +3,94 @@ package controller;
 import java.util.*;
 
 import model.Employee;
+import model.Product;
 
 public class EmployeeHandler {
+	public static String errorMsg;
 
 	public EmployeeHandler() {
-		
+		// TODO Auto-generated constructor stub
 	}
 	
-	public static String errorMessage
-	
-	public static List<Employee> getAllEmployees(){
-		Employee employee = new Employee();
-		return employee.getAll();
+	public static Vector<Employee> getAllEmployees(){
+		Employee emp = new Employee();
+		return emp.getAllEmployees();
 	}
 	
-	public static boolean insertEmployee(int employeeID, int empRoleID, int positionID, String empName, String empStatus, int salary, String empUsername, String empPassword) {
-		if(employeeID) {
-			errorMassage = "ID cannot be empty!";
+	public static Employee getEmployee() {
+		Employee emp = new Employee();		
+		return (Employee) emp.getEmployee();
+	}
+	
+	public static boolean insertEmployee(int positionID, String empName, String empStatus, int salary, String empUsername, String empPassword) {
+		if(empName.length() < 5) {
+			errorMsg = "Name must be at least 5 characters!";
 			return false;
-		}else if(employeeName.length()<5 || !Character.isUpperCase(employeeName.charAt(0))) {
+		}
+		else if(positionID > 4 && positionID < 1) {
+			errorMsg = "Position index is out of bounds!";
+			return false;
+		}
+		else if(!(empStatus.equals("Single") || empStatus.equals("Married"))) {
+			errorMsg = "Status has to be \"Single\" or \"Married\"";
 			return false;
 		}
 		
-		Employee employee = new Employee();
-		employee.setEmployeeID(employeeID);
+		Employee emp = new Employee();
+		emp.setPositionID(positionID);
+		emp.setEmployeeName(empName);
+		emp.setEmployeeStatus(empStatus);
+		emp.setSalary(salary);
+		emp.setEmployeeUsername(empUsername);
+		emp.setEmployeePassword(empPassword);
 		
-		if(!Employee.insert())
-		
-		return employee.insert();
+		if(!emp.insertEmployee()) {
+			errorMsg="Insert Failed!";
+			return false;
+		}
+		return true;
 	}
 	
-	public static boolean updateEmployee()
-	{
-		Employee employee = new Employee();
+	public static boolean updateEmployee(int employeeID, int positionID, String empName, String empStatus, int salary, String empUsername, String empPassword) {
+		if(empName.length() < 5) {
+			errorMsg = "Name must be at least 5 characters!";
+			return false;
+		}
+		else if(positionID > 4 && positionID < 1) {
+			errorMsg = "Position index is out of bounds!";
+			return false;
+		}
+		else if(!(empStatus.equals("Single") || empStatus.equals("Married"))) {
+			errorMsg = "Status has to be \"Single\" or \"Married\"";
+			return false;
+		}
+
 		
-		employee.setEmployeeID(employeeID);
-		employee.setEmployeeRoleID(empRoleID);
-		employee.setPositionID(positionID);
-		employee.setEmployeeName(empName);
-		employee.setEmployeeStatus(empStatus);
-		employee.setSalary(salary);
-		employee.setEmployeeUsername(empUsername);
-		employee.setEmployeePassword(empPassword);
-	
+		Employee emp = new Employee();
+		emp.setEmployeeID(employeeID);
+		emp.setPositionID(positionID);
+		emp.setEmployeeName(empName);
+		emp.setEmployeeStatus(empStatus);
+		emp.setSalary(salary);
+		emp.setEmployeeUsername(empUsername);
+		emp.setEmployeePassword(empPassword);
 		
-		
+		if(!emp.updateEmployee()) {
+			errorMsg="Update Failed!";
+			return false;
+		}
+		return true;
 	}
 	
-	public static boolean deleteEmployee(int employeeID) {
-		Employee employee = new Employee();
+	public static boolean fireEmployee(int employeeID) {
+		Employee emp = new Employee();
+		emp.setEmployeeID(employeeID);
 		
+		if(!emp.fireEmployee()) {
+			errorMsg="Employee has not been fired!";
+			return false;
+		}
+		return true;
 	}
+	
 }
