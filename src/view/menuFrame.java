@@ -14,7 +14,7 @@ public class menuFrame extends JFrame implements MenuListener, ActionListener {
 	JMenu homeMenu, logoutMenu;
 	JMenuItem insertMenu, manageMenu, viewMenu;
 	JSeparator separator1;
-	viewIntFrame viewIntFrame;
+	productView viewIntFrame;
 	insertIntFrame insertIntFrame;
 	
 	public menuFrame() {
@@ -37,7 +37,7 @@ public class menuFrame extends JFrame implements MenuListener, ActionListener {
 				if(viewIntFrame != null) {
 					viewIntFrame.dispose();
 				}
-				add(viewIntFrame = new viewIntFrame());
+				add(viewIntFrame = new productView());
 			}
 		});
 		
@@ -56,7 +56,7 @@ public class menuFrame extends JFrame implements MenuListener, ActionListener {
 		
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setTitle("Home");
+		setTitle("Homepage");
 		setSize(750,780);
 		setLocationRelativeTo(null);
 		setVisible(true);

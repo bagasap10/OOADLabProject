@@ -1,20 +1,37 @@
 package connect;
 import java.sql.*;
+import java.sql.Connection;
 
 public class Connect {
 
-	public Connection con;
+	public static Connection con;
 	public Statement stat;
 	public ResultSet rs;
 	public ResultSetMetaData rsm;
 	public PreparedStatement ps;
 	
+	public static Connection getInstance() {
+		if(con == null) {
+			new Connect();
+		}
+		return con;
+	}
+	
+	
+	
+	
 	public Connect() {
-		// TODO Auto-generated constructor stub
+		try {
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test2", "root", "");
+			System.out.println("Connect Success");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Connect Fail");
+		}
+
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test2", "root", "");
 			
 			stat = con.createStatement();
 			
@@ -25,7 +42,7 @@ public class Connect {
 			System.out.println("Connect fail");
 		}
 		try {
-			rs = stat.executeQuery("SELECT * FROM test2");
+			rs = stat.executeQuery("SELECT * FROM product");
 			rsm = rs.getMetaData();
 		}
 		catch (SQLException e) {
@@ -69,3 +86,4 @@ public class Connect {
     }
 
 }
+

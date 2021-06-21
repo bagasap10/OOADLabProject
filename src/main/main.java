@@ -5,6 +5,7 @@ import java.util.*;
 
 import connect.Connect;
 import view.menuFrame;
+import view.productView;
 
 public class main{
 	
