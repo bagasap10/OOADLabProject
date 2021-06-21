@@ -62,22 +62,21 @@ public class productView extends JInternalFrame implements MouseListener, Action
 				int price = Integer.parseInt(priceField.getText());
 				int stock = Integer.parseInt(stockField.getText());
 
-				try {
-					PreparedStatement ps = Connect.getInstance().prepareStatement("INSERT INTO product VALUES(null,?,?,?)");
-					ps.setString(2, name);
-					ps.setString(3, description);
-					ps.setInt(4, price);
-					ps.setInt(5, stock);
-					
-					ps.executeUpdate();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				boolean isInserted = ProductHandler.insertNewProduct(name, description, price, stock);
+				if(isInserted) {					
+					refreshTable();	
+					System.out.println("insert Clicked");
+					idField.setText("");
+					nameField.setText("");
+					descField.setText("");
+					priceField.setText("");
+					stockField.setText("");
+					JOptionPane.showMessageDialog(null, "Insert Successful");
 				}
-				System.out.println("insert Clicked");
-				JOptionPane.showMessageDialog(null, "Insert Successful");
-
-				refreshTable();	
+				else {
+					String message = ProductHandler.errorMsg;
+					JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 
@@ -85,32 +84,57 @@ public class productView extends JInternalFrame implements MouseListener, Action
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int id = Integer.parseInt(idField.getText());
 				String name = nameField.getText();
 				String description = descField.getText();
 				int price = Integer.parseInt(priceField.getText());
 				int stock = Integer.parseInt(stockField.getText());
 
-//				String query = String.format("UPDATE `product` SET `name`=[value-2],`description`=[value-3],`price`=[value-4],`stock`=[value-5] WHERE 1", name, description, price, stock);
-//				con.execUpdate(query);
-				
-				try {
-					PreparedStatement ps = Connect.getInstance().prepareStatement("INSERT INTO product VALUES(null,?,?,?)");
-					ps.setString(2, name);
-					ps.setString(3, description);
-					ps.setInt(4, price);
-					ps.setInt(5, stock);
-					
-					ps.executeUpdate();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				boolean status = ProductHandler.updateProduct(id, name, description, price);
+				boolean status2 = ProductHandler.updateProductStock(id,stock);
+				if(status && status2) {					
+					refreshTable();	
+					System.out.println("Update Clicked");
+					idField.setText("");
+					nameField.setText("");
+					descField.setText("");
+					priceField.setText("");
+					stockField.setText("");
+					JOptionPane.showMessageDialog(null, "Update Successful!");
 				}
-				
-				
-				System.out.println("insert Clicked");
-				JOptionPane.showMessageDialog(null, "Insert Successful!");
+				else {
+					String message = ProductHandler.errorMsg;
+					JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		
+		deleteBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				int id = Integer.parseInt(idField.getText());
+				String name = nameField.getText();
+				String description = descField.getText();
+				int price = Integer.parseInt(priceField.getText());
+				int stock = Integer.parseInt(stockField.getText());
 
-				refreshTable();	
+				boolean status = ProductHandler.deleteProduct(id);
+				if(status) {					
+					refreshTable();	
+					System.out.println("Delete Clicked");
+					idField.setText("");
+					nameField.setText("");
+					descField.setText("");
+					priceField.setText("");
+					stockField.setText("");
+					JOptionPane.showMessageDialog(null, "Item has been deleted!");
+				}
+				else {
+					String message = ProductHandler.errorMsg;
+					JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 
@@ -128,15 +152,15 @@ public class productView extends JInternalFrame implements MouseListener, Action
 
 		northPanel.add(scrollPane);
 
-		southPanel.add(id);
+		//		southPanel.add(id);
 		southPanel.add(name);
 		southPanel.add(desc);
 		southPanel.add(price);
 		southPanel.add(stock);
 
 		northPanel.add(scrollPane);
-		//		centerPanel.add(id);
-		//		centerPanel.add(idField);
+		centerPanel.add(id);
+		centerPanel.add(idField);
 		centerPanel.add(name);
 		centerPanel.add(nameField);
 		centerPanel.add(desc);
@@ -215,6 +239,9 @@ public class productView extends JInternalFrame implements MouseListener, Action
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
+		//		if(arg0.getSource() == insertBtn) {
+		//			
+		//		}
 
 	}
 
@@ -247,92 +274,4 @@ public class productView extends JInternalFrame implements MouseListener, Action
 		// TODO Auto-generated method stub
 
 	}
-
-
-	//	@Override
-	//	public void actionPerformed(ActionEvent e) {
-	//		// TODO Auto-generated method stub
-	//		if(e.getSource() == insertBtn) {
-	//			int id = Integer.parseInt(idfield.getText();
-	//			String name = nameField.getText();
-	//			String type = typeField.getText();
-	//			String cuisine = cuisineField.getText();
-	//			
-	//			boolean isInserted = EmployeeHandler.insertEmployee(name, type, cuisine);
-	//			if(isInserted) {
-	//				refreshTable();
-	//				idfield.setText("");
-	//				nameField.setText("");
-	//				typeField.setText("");
-	//				cuisineField.setText("");
-	//				
-	//				JOptionPane.showMessageDialog(null, "Insert success!");
-	//			}else {
-	//				String message = EmployeeHandler.errorMessage;
-	//				JOptionPane.showMessageDialog(null, message, "Error", JOptionPane. ERROR_MESSAGE);
-	//			}
-	//		}
-	//		
-	//		
-	//		else if(e.getSource() == updateButton) {
-	//			int employeeID = idField.getText();
-	//			
-	//			
-	//			if(EmployeeHandler.updateEmployee(emp)) {
-	//				refreshTable();
-	//				
-	//				idField.setText("");
-	//				
-	//				JOptionPane.showMessageDialog(null, "Update success!");
-	//			}else {
-	//				JOptionPane.showMessageDialog(null, EmployeeHandler.errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
-	//			}
-	//		}
-	//		
-	//		else if(e.getSource() == deleteButton) {
-	//			String id = idField.getText();
-	//			
-	//			if(EmployeeHandler.deleteEmployee(id)) {
-	//				
-	//			}
-	//		}
-	//	}
-	//
-	//	@Override
-	//	public void mouseClicked(MouseEvent e) {
-	//		// TODO Auto-generated method stub
-	//		
-	//	}
-	//
-	//	@Override
-	//	public void mousePressed(MouseEvent e) {
-	//		// TODO Auto-generated method stub
-	//		
-	//	}
-	//
-	//	@Override
-	//	public void mouseReleased(MouseEvent e) {
-	//		// TODO Auto-generated method stub
-	//		
-	//	}
-	//
-	//	@Override
-	//	public void mouseEntered(MouseEvent e) {
-	//		// TODO Auto-generated method stub
-	//		
-	//	}
-	//
-	//	@Override
-	//	public void mouseExited(MouseEvent e) {
-	//		// TODO Auto-generated method stub
-	//		
-	//	}
-	//
-	//	@Override
-	//	public void actionPerformed(ActionEvent arg0) {
-	//		// TODO Auto-generated method stub
-	//		
-	//	}
-
-
 }

@@ -8,7 +8,7 @@ import java.util.*;
 import connect.Connect;
 
 public class Product {
-	
+
 	private static Connect con = new Connect();
 
 	private int productID;
@@ -16,10 +16,10 @@ public class Product {
 	private String description;
 	private int price;
 	private int stock;
-	
-	
+
+
 	public Product() {
-		
+
 	}
 
 	public Product(int productID, String name, String description, int price, int stock) {
@@ -42,7 +42,7 @@ public class Product {
 				String description = rs.getString("description");
 				int price = rs.getInt("price");
 				int stock = rs.getInt("stock");
-				
+
 				Product product = new Product(id, name, description, price, stock);
 				products.add(product);
 			}
@@ -54,64 +54,78 @@ public class Product {
 		return null;
 	}
 
-//	public Product insertNewProduct() {
-//		Product product = new Product();
-//		
-//		try{
-//			String query = String.format("INSERT INTO Product (productID, name, description, price, stock) VALUES ('%d', '%s', '%s', '%d', '%d')", productID, name, description, price, stock);
-//			con.stat.execute(query);
-//		}
-//		catch(Exception e) {
-//			return null;
-//		}
-//		return product;
-//	}
+	public Product getProduct() {
+		try {
+			PreparedStatement ps = Connect.getInstance().prepareStatement("SELECT * FROM product WHERE productID = ?");
+			ps.setInt(1, productID);
 
-	
-	
+			Product product = new Product(productID, name, description, price, stock);
+			return product;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 
-//	public static Product getProduct(int productID) {
-//		Product product = new Product();
-//		
-//		try {
-//			con.rs = con.execQuery("SELECT * FROM Employee WHERE ID = " + productID);
-//			
-//			if(con.rs.next() == true) {
-//				product.setProductID(con.rs.getInt("ID"));
-//				product.setName(con.rs.getString("name"));
-//				product.setDescription(con.rs.getString("description"));
-//				product.setPrice(con.rs.getInt("price"));
-//				product.setStock(con.rs.getInt("stock"));
-//			}
-//		}
-//		
-//		catch(Exception e) {
-//			return null;
-//		}
-//		return product;
-//	}
-//	
-//	public Product updateProduct() {
-//		Product product = new Product();
-//		try {
-//			PreparedStatement ps = con.prepareStatement("UPDATE Employee SET roleID=?, name=?, username=?, salary=?, status=?, password=? WHERE id=?");
-//			
-//			ps.setInt(1, productID);
-//			ps.setString(2, name);
-//			ps.setString(3, description);
-//			ps.setInt(4, price);
-//			ps.setInt(5, stock);
-//		}
-//		catch(Exception e) {
-//			return null;
-//		}
-//		return product;
-//	}
-//	
-//	public boolean deleteProduct() {
-//		
-//	}
-	
+	public boolean insertNewProduct() {
+		try {
+			PreparedStatement ps = Connect.getInstance().prepareStatement("INSERT INTO product VALUES(null,?,?,?,?)");
+			ps.setString(1, name);
+			ps.setString(2, description);
+			ps.setInt(3, price);
+			ps.setInt(4, stock);
+
+			return ps.executeUpdate() == 1;
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return false;
+	}
+
+	public boolean updateProduct() {
+		try {
+			PreparedStatement ps = Connect.getInstance().prepareStatement("UPDATE product SET name = ?, description = ?, price = ? WHERE productID = ?");
+			ps.setString(1, name);
+			ps.setString(2, description);
+			ps.setInt(3, price);
+			ps.setInt(4,productID);
+
+			return ps.executeUpdate() == 1;
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return false;
+	}
+
+	public boolean updateProductStock() {
+		try {
+			PreparedStatement ps = Connect.getInstance().prepareStatement("UPDATE product SET stock = ? WHERE productID = ?");
+			ps.setInt(1, stock);
+			ps.setInt(2,productID);
+
+			return ps.executeUpdate() == 1;
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return false;
+	}
+
+	public boolean deleteProduct() {
+		try {
+			PreparedStatement ps = Connect.getInstance().prepareStatement("DELETE FROM product WHERE productID = ?");
+			ps.setInt(1,productID);
+
+			return ps.executeUpdate() == 1;
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return false;
+	}
 
 	/**
 	 * @return the productID
@@ -182,6 +196,6 @@ public class Product {
 	public void setStock(int stock) {
 		this.stock = stock;
 	}
-	
-	
+
+
 }
