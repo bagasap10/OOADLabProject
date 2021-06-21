@@ -198,7 +198,6 @@ public class employeeView extends JFrame implements MouseListener, ActionListene
 		this.add(northPanel,BorderLayout.NORTH);
 		this.add(southPanel,BorderLayout.SOUTH);
 		this.add(centerPanel,BorderLayout.CENTER);
-//		this.setClosable(true);
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(1280,720);
