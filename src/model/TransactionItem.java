@@ -34,7 +34,7 @@ public class TransactionItem {
 		
 		int res = 0;
 		try {
-			PreparedStatement ps = (PreparedStatement) Connect.getConnection().prepareStatement(query);
+			PreparedStatement ps = (PreparedStatement) Connect.getInstance().prepareStatement(query);
 			ps.setInt(1, this.transactionID);
 			ps.setInt(2,  this.productID);
 			ps.setInt(3, this.productQuantity);
@@ -54,7 +54,7 @@ public class TransactionItem {
 		String query = "SELECT * from transaction_item";
 				
 		try {
-			PreparedStatement ps = (PreparedStatement) Connect.getConnection().prepareStatement(query);
+			PreparedStatement ps = (PreparedStatement) Connect.getInstance().prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 					
 			while (rs.next()) {
@@ -79,7 +79,7 @@ public class TransactionItem {
 		String query = "SELECT * from transaction_item where transactionID = ?";
 				
 		try {
-			PreparedStatement ps = (PreparedStatement) Connect.getConnection().prepareStatement(query);
+			PreparedStatement ps = (PreparedStatement) Connect.getInstance().prepareStatement(query);
 			ps.setInt(1, transactionID);
 			ResultSet rs = ps.executeQuery();
 					

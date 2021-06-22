@@ -28,7 +28,7 @@ public class CartItem {
 		String query = "SELECT * from cart_item";
 		
 		try {
-			PreparedStatement ps = (PreparedStatement) Connect.getConnection().prepareStatement(query);
+			PreparedStatement ps = (PreparedStatement) Connect.getInstance().prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			
 			while (rs.next()) {
