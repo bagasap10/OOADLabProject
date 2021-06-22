@@ -11,8 +11,8 @@ import connect.Connect;
 
 public class CartItem {
 
-	private static Integer productID;
-	private static Integer quantity;
+	private Integer productID;
+	private Integer quantity;
 	
 	public CartItem(Integer productID, Integer quantity) {
 		super();
@@ -24,14 +24,10 @@ public class CartItem {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public static Vector<CartItem> getListCartItem(){
-		Vector<CartItem> carts = new Vector<>();
+	public static Vector<Product> getListCartItem(){
+		Vector<Product> carts = new Vector<>();
 		try {
-<<<<<<< Updated upstream
-			PreparedStatement ps = (PreparedStatement) Connect.getInstance().prepareStatement(query);
-=======
 			PreparedStatement ps = Connect.getInstance().prepareStatement("SELECT * FROM product");
->>>>>>> Stashed changes
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 				int id = rs.getInt("productID");
@@ -40,8 +36,8 @@ public class CartItem {
 				int price = rs.getInt("price");
 				int stock = rs.getInt("stock");
 
-				CartItem cart = new CartItem(productID, quantity);
-				carts.add(cart);
+				Product product = new Product(id, name, description, price, stock);
+				carts.add(product);
 			}
 			return carts;
 		} catch (SQLException e) {
