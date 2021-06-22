@@ -11,6 +11,8 @@ import javax.swing.JOptionPane;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import controller.ProductHandler;
+
 public class homeProductAdminView extends JFrame implements MenuListener, ActionListener {
 	JMenuBar menuBar;
 	JMenu homeMenu, logoutMenu;
@@ -33,7 +35,7 @@ public class homeProductAdminView extends JFrame implements MenuListener, Action
 					prodView.dispose();
 				}
 				System.out.println("Employee");
-				add(prodView = new productView());
+				add(prodView = ProductHandler.viewProductManagementForm());
 			}
 		});
 		

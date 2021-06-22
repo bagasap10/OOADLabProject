@@ -64,7 +64,6 @@ public class employeeView extends JInternalFrame implements MouseListener, Actio
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				int empID = Integer.parseInt(employeeIDField.getText());
 				int positionID = Integer.parseInt(positionIDField.getText());
 				String empName = empNameField.getText();
 				String empStatus = empStatusField.getText();

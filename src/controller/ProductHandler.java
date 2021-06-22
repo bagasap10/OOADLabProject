@@ -2,6 +2,8 @@ package controller;
 
 import java.util.Vector;
 import model.Product;
+import view.homeProductAdminView;
+import view.productView;
 
 public class ProductHandler {
 	public static String errorMsg;
@@ -9,6 +11,16 @@ public class ProductHandler {
 	public ProductHandler() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+	public static productView viewProductManagementForm() {
+		return new productView();
+	}
+	
+	public static homeProductAdminView viewPA() {
+		return homeProductAdminView();
+	}
+	
 	
 	public static Vector<Product> getAllProducts(){
 		Product product = new Product();
