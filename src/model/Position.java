@@ -1,54 +1,55 @@
 package model;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import connect.Connect;
 
 public class Position {
-	
+
 	private static Connect con = new Connect();
-	
+
 	private int positionID;
 	private String name;
-	
-	public static List<Position> getAllPostions() {
-		List<Position> listPosition = new ArrayList<Position>();
-		
+
+	public Vector<Position> getAllPositions() {
+		Vector<Position> listPosition = new Vector<>();
+
 		try {
-			con.rs = con.execQuery("SELECT * FROM Position");
-			
-			while(con.rs.next() == true) {
+			PreparedStatement ps = Connect.getInstance().prepareStatement("SELECT * FROM position");
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				int posID = rs.getInt("positionID");
+				String name = rs.getString("name");
+
 				Position position = new Position();
-				
-				position.setPositionID(con.rs.getInt("positionID"));
-				position.setName(con.rs.getString("name"));
-				
+				listPosition.add(position);
 			}
+			return listPosition;
 		}
-		
+
 		catch (Exception e) {
-			return null;
+			e.printStackTrace();
 		}
-		
-		return listPosition;
+		return null;
 	}
-	
-	public static Position getPosition(int positionID) {
-		Position position = new Position();
-		
+
+	public String getPosition() {
+		String name = null;
 		try {
-			con.rs = con.execQuery("SELECT * FROM Employee WHERE ID = " + positionID);
+			PreparedStatement ps = Connect.getInstance().prepareStatement("SELECT * FROM position WHERE positionID = ?");
+			ps.setInt(1, positionID);
+			ResultSet rs = ps.executeQuery();
+			name = rs.getString(name);
 			
-			if(con.rs.next() == true) {
-				position.setPositionID(con.rs.getInt("positionID"));
-				position.setName(con.rs.getString("name"));
-			}
+			return name;
 		}
-		
+
 		catch(Exception e) {
 			return null;
 		}
-		return position;
 	}
 
 	/**
@@ -78,7 +79,7 @@ public class Position {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
-	
+
+
+
 }

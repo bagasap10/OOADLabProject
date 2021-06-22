@@ -219,6 +219,11 @@ public class productView extends JInternalFrame implements MouseListener, Action
 
 		for (Product product : products) {
 			rowData = new Vector<>();
+			System.out.println(product.getProductID());
+			System.out.println(product.getName());
+			System.out.println(product.getDescription());
+			System.out.println(product.getPrice());
+			System.out.println(product.getStock());
 			rowData.add(product.getProductID());
 			rowData.add(product.getName());
 			rowData.add(product.getDescription());

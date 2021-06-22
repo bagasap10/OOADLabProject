@@ -11,8 +11,10 @@ import javax.swing.table.DefaultTableModel;
 
 import connect.Connect;
 import controller.EmployeeHandler;
+import controller.PositionHandler;
 import controller.ProductHandler;
 import model.Employee;
+import model.Position;
 import model.Product;
 
 public class employeeView extends JInternalFrame implements MouseListener, ActionListener {
@@ -196,7 +198,7 @@ public class employeeView extends JInternalFrame implements MouseListener, Actio
 	}
 
 	public void genTable() {
-		Object[] column = {"employeeID", "positionID", "Name", "Status", "Salary", "Username", "Password"};
+		Object[] column = {"employeeID", "Position", "Name", "Status", "Salary", "Username", "Password"};
 
 		dtm = new DefaultTableModel(column, 0);
 
@@ -215,9 +217,21 @@ public class employeeView extends JInternalFrame implements MouseListener, Actio
 				int salary = con.rs.getInt("salary");
 				String empUsername = con.rs.getString("username");
 				String empPassword = con.rs.getString("password");
+				
+				String posName = PositionHandler.getPosition(positionID);
+				
+				Vector<Position> pos = PositionHandler.getAllPositions();
+				for (Position position : pos) {
+					System.out.println(position.getPositionID());
+					System.out.println(position.getName());
+//					if(positionID == position.getPositionID()) {
+//						posName = position.getName();
+//						break;
+//					}
+				}
 
 				rowData.add(empID);
-				rowData.add(positionID);
+				rowData.add(posName);
 				rowData.add(empName);
 				rowData.add(empStatus);
 				rowData.add(salary);
@@ -225,6 +239,7 @@ public class employeeView extends JInternalFrame implements MouseListener, Actio
 				rowData.add(empPassword);
 
 				dtm.addRow(rowData);
+				System.out.println(posName);
 				//				System.out.println("debug3");
 			}
 		}

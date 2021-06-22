@@ -17,9 +17,9 @@ public class ProductHandler {
 		return new productView();
 	}
 	
-	public static homeProductAdminView viewPA() {
-		return homeProductAdminView();
-	}
+//	public static homeProductAdminView viewPA() {
+//		return homeProductAdminView();
+//	}
 	
 	
 	public static Vector<Product> getAllProducts(){
