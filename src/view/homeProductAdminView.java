@@ -18,7 +18,7 @@ public class homeProductAdminView extends JFrame implements MenuListener, Action
 	JMenu homeMenu, logoutMenu;
 	JMenuItem productsMenu, vouchersMenu;
 	productView prodView = null;
-	// vouchers view
+	voucherView vouchView = null;
 	
 	public homeProductAdminView() {
 		menuBar = new JMenuBar();
@@ -26,6 +26,18 @@ public class homeProductAdminView extends JFrame implements MenuListener, Action
 		logoutMenu = new JMenu("Logout");
 		
 		vouchersMenu = new JMenuItem("Manage Vouchers");
+		vouchersMenu.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(vouchView != null) {
+					vouchView.dispose();
+				}
+				System.out.println("Vouchers");
+				add(vouchView = VoucherHandler.viewVoucherManagementForm());
+			}
+		});
 		
 		productsMenu = new JMenuItem("Manage Products");
 		productsMenu.addActionListener(new ActionListener() {
@@ -46,7 +58,7 @@ public class homeProductAdminView extends JFrame implements MenuListener, Action
 				int res = JOptionPane.showConfirmDialog(null, "Are you sure?");
 				if(res == 0) {
 					dispose();
-					new menuFrame();
+					new homePage();
 				}
 			}
 			

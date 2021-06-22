@@ -42,7 +42,7 @@ public class homeHRDView extends JFrame implements MenuListener, ActionListener 
 				int res = JOptionPane.showConfirmDialog(null, "Are you sure?");
 				if(res == 0) {
 					dispose();
-					new menuFrame();
+					new homePage();
 				}
 			}
 			

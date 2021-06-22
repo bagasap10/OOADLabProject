@@ -16,11 +16,7 @@ public class ProductHandler {
 	public static productView viewProductManagementForm() {
 		return new productView();
 	}
-	
-//	public static homeProductAdminView viewPA() {
-//		return homeProductAdminView();
-//	}
-	
+		
 	
 	public static Vector<Product> getAllProducts(){
 		Product product = new Product();

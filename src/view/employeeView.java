@@ -8,6 +8,7 @@ import java.util.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 import connect.Connect;
 import controller.EmployeeHandler;
@@ -60,6 +61,7 @@ public class employeeView extends JInternalFrame implements MouseListener, Actio
 		deleteBtn = new JButton("Delete");
 
 		table = new JTable(dtm);
+		table.setRowHeight(30);
 		genTable();
 
 		insertBtn.addActionListener(new ActionListener() {
@@ -160,16 +162,17 @@ public class employeeView extends JInternalFrame implements MouseListener, Actio
 			public void mouseClicked(MouseEvent e) {
 				employeeIDField.setText(table.getValueAt(table.getSelectedRow(),0).toString());
 				positionIDField.setText(table.getValueAt(table.getSelectedRow(),1).toString());
-				empNameField.setText(table.getValueAt(table.getSelectedRow(),2).toString());
-				empStatusField.setText(table.getValueAt(table.getSelectedRow(),3).toString());
-				salaryField.setText(table.getValueAt(table.getSelectedRow(),4).toString());
-				empUsernameField.setText(table.getValueAt(table.getSelectedRow(),5).toString());
-				empPasswordField.setText(table.getValueAt(table.getSelectedRow(),6).toString());
+				empNameField.setText(table.getValueAt(table.getSelectedRow(),3).toString());
+				empStatusField.setText(table.getValueAt(table.getSelectedRow(),4).toString());
+				salaryField.setText(table.getValueAt(table.getSelectedRow(),5).toString());
+				empUsernameField.setText(table.getValueAt(table.getSelectedRow(),6).toString());
+				empPasswordField.setText(table.getValueAt(table.getSelectedRow(),7).toString());
 
 			}
 		});
 
 		scrollPane = new JScrollPane(table);
+		scrollPane.setPreferredSize(new Dimension(1000, 300));
 
 
 		northPanel.add(scrollPane);
@@ -198,13 +201,10 @@ public class employeeView extends JInternalFrame implements MouseListener, Actio
 	}
 
 	public void genTable() {
-		Object[] column = {"employeeID", "Position", "Name", "Status", "Salary", "Username", "Password"};
+		Object[] column = {"employeeID", "positionID", "Position", "Name", "Status", "Salary", "Username", "Password"};
 
-		dtm = new DefaultTableModel(column, 0);
-
-		//		System.out.println("debug");
+		dtm = new DefaultTableModel(column, 0);	
 		con.rs = con.execQuery("SELECT * FROM employee");
-		//		System.out.println("debug2");
 
 		try {
 			while(con.rs.next()) {
@@ -220,17 +220,19 @@ public class employeeView extends JInternalFrame implements MouseListener, Actio
 				
 				String posName = PositionHandler.getPosition(positionID);
 				
+				
 				Vector<Position> pos = PositionHandler.getAllPositions();
 				for (Position position : pos) {
 					System.out.println(position.getPositionID());
 					System.out.println(position.getName());
-//					if(positionID == position.getPositionID()) {
-//						posName = position.getName();
-//						break;
-//					}
+					if(positionID == position.getPositionID()) {
+						posName = position.getName();
+						break;
+					}
 				}
 
 				rowData.add(empID);
+				rowData.add(positionID);
 				rowData.add(posName);
 				rowData.add(empName);
 				rowData.add(empStatus);
@@ -251,7 +253,7 @@ public class employeeView extends JInternalFrame implements MouseListener, Actio
 
 
 	private void refreshTable() {
-		Object[] column = {"employeeID", "positionID", "Name", "Status", "Salary", "Username", "Password"};
+		Object[] column = {"employeeID", "positionID", "Position", "Name", "Status", "Salary", "Username", "Password"};
 
 		dtm = new DefaultTableModel(column, 0);
 		Vector<Employee> employees = EmployeeHandler.getAllEmployees();
@@ -259,7 +261,20 @@ public class employeeView extends JInternalFrame implements MouseListener, Actio
 		for (Employee employee : employees) {
 			rowData = new Vector<>();
 			rowData.add(employee.getEmployeeID());
+			String posName = "";
+			
+			
+			Vector<Position> pos = PositionHandler.getAllPositions();
+			for (Position position : pos) {
+				System.out.println(position.getPositionID());
+				System.out.println(position.getName());
+				if(employee.getPositionID() == position.getPositionID()) {
+					posName = position.getName();
+					break;
+				}
+			}
 			rowData.add(employee.getPositionID());
+			rowData.add(posName);
 			rowData.add(employee.getEmployeeName());
 			rowData.add(employee.getEmployeeStatus());
 			rowData.add(employee.getSalary());

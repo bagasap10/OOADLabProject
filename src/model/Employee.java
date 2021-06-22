@@ -63,7 +63,7 @@ public class Employee {
 
 	public Employee getEmployee() {
 		try {
-			PreparedStatement ps = Connect.getInstance().prepareStatement("SELECT * FROM product WHERE productID = ?");
+			PreparedStatement ps = Connect.getInstance().prepareStatement("SELECT * FROM product WHERE employeeID = ?");
 			ps.setInt(1, employeeID);
 
 			Employee emp = new Employee();

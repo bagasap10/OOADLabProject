@@ -13,6 +13,19 @@ public class Position {
 
 	private int positionID;
 	private String name;
+	
+	
+	
+	
+	public Position(int positionID, String name) {
+		super();
+		this.positionID = positionID;
+		this.name = name;
+	}
+
+	public Position() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public Vector<Position> getAllPositions() {
 		Vector<Position> listPosition = new Vector<>();
@@ -24,7 +37,7 @@ public class Position {
 				int posID = rs.getInt("positionID");
 				String name = rs.getString("name");
 
-				Position position = new Position();
+				Position position = new Position(posID, name);
 				listPosition.add(position);
 			}
 			return listPosition;
