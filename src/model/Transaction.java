@@ -1,5 +1,8 @@
 package model;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 import connect.Connect;
@@ -8,48 +11,66 @@ public class Transaction {
 
 	private static Connect con = new Connect();
 	
-	private static int transactionID;
+	private int transactionID;
 	private Date purchaseDate;
 	private int voucherID;
 	private int employeeID;
 	private int totalPrice;
 	
-	public Transaction insertTransaction() {
-		Transaction trans = new Transaction();
-
-		try{
-			String query = String.format("INSERT INTO Transaction (transactionID, purchaseDate, voucherID, employeeID, totalPrice) VALUES ('%d', '%s', '%d', '%d', '%d')", transactionID, purchaseDate, voucherID, employeeID, totalPrice);
-			con.stat.execute(query);
-		}
-		catch(Exception e) {
-			return null;
-		}
-		return trans;
+	public Transaction() {
+		
 	}
 	
-	public static List<Transaction> getAllTransaction() {
-		List<Transaction> listTransaction = new ArrayList<Transaction>();
-		
-		try {
-			con.rs = con.execQuery("SELECT * FROM Transaction");
-			
-			while(con.rs.next() == true) {
-				Transaction trans = new Transaction();
-				
-				trans.setTransactionID(con.rs.getInt("transactionID"));
-				trans.setPurchaseDate(con.rs.getDate("purchaseDate"));
-				trans.setVoucherID(con.rs.getInt("voucherID"));
-				trans.setEmployeeID(con.rs.getInt("employeeID"));
-				trans.setTotalPrice(con.rs.getInt("price"));
 
+
+	public Transaction(int transactionID, Date purchaseDate, int voucherID, int employeeID, int totalPrice) {
+		super();
+		this.transactionID = transactionID;
+		this.purchaseDate = purchaseDate;
+		this.voucherID = voucherID;
+		this.employeeID = employeeID;
+		this.totalPrice = totalPrice;
+	}
+
+
+
+	public Vector<Transaction> getAllProducts(){
+		Vector<Transaction> trans = new Vector<>();
+		try {
+			PreparedStatement ps = Connect.getInstance().prepareStatement("SELECT * FROM transaction");
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				int transID = rs.getInt("transactionID");
+				Date date = rs.getDate("purchaseDate");
+				int vouchID = rs.getInt("voucherID");
+				int empID = rs.getInt("employeeID");
+				int price = rs.getInt("totalPrice");
+
+				Transaction tran = new Transaction(transID, date, vouchID, empID, price);
+				trans.add(tran);
 			}
+			return trans;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		catch (Exception e) {
-			return null;
+		return null;
+	}
+	
+	public boolean insertTransaction() {
+		try {
+			PreparedStatement ps = Connect.getInstance().prepareStatement("INSERT INTO transaction VALUES(null,?,?,?,?)");
+			ps.setDate(2,  (java.sql.Date) purchaseDate);
+			ps.setInt(2, voucherID);
+			ps.setInt(3, employeeID);
+			ps.setInt(4, totalPrice);
+
+			return ps.executeUpdate() == 1;
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		
-		return listTransaction;
+		return false;
 	}
 	
 	public static Transaction getTransactionDetail() {
