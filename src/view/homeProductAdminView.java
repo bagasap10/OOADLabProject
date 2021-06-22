@@ -12,6 +12,7 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import controller.ProductHandler;
+import controller.VoucherHandler;
 
 public class homeProductAdminView extends JFrame implements MenuListener, ActionListener {
 	JMenuBar menuBar;

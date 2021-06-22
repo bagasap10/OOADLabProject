@@ -12,8 +12,10 @@ import javax.swing.table.DefaultTableModel;
 import connect.Connect;
 import controller.EmployeeHandler;
 import controller.ProductHandler;
+import controller.VoucherHandler;
 import model.Employee;
 import model.Product;
+import model.Voucher;
 
 public class voucherView extends JInternalFrame implements MouseListener, ActionListener{
 
@@ -53,9 +55,8 @@ public class voucherView extends JInternalFrame implements MouseListener, Action
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String name = statusField.getText();
-				int price = Integer.parseInt(discountField.getText());
-				int stock = Integer.parseInt(idField.getText());
+				int discount = Integer.parseInt(discountField.getText());
+				String status = statusField.getText();
 				
 				boolean isInserted = VoucherHandler.insertNewVoucher(discount, status);
 				if(isInserted) {					
@@ -81,9 +82,8 @@ public class voucherView extends JInternalFrame implements MouseListener, Action
 				int discount = Integer.parseInt(discountField.getText());
 				String status = statusField.getText();
 				
-				boolean status = VoucherHandler.updateVoucher(id, discount, status);
-				boolean status2 = VoucherHandler.updateProductStock(id,status);
-				if(status && status2) {					
+				boolean status1 = VoucherHandler.updateVoucher(id, discount, status);
+				if(status1) {					
 					refreshTable();	
 					System.out.println("Update Clicked");
 					idField.setText("");
@@ -107,8 +107,8 @@ public class voucherView extends JInternalFrame implements MouseListener, Action
 				int discount = Integer.parseInt(discountField.getText());
 				String status = statusField.getText();
 				
-				boolean status = VoucherHandler.deleteVoucher(id);
-				if(status) {					
+				boolean status1 = VoucherHandler.deleteVoucher(id);
+				if(status1) {					
 					refreshTable();	
 					System.out.println("Delete Clicked");
 					idField.setText("");
@@ -189,7 +189,7 @@ public class voucherView extends JInternalFrame implements MouseListener, Action
 		Object[] column = {"ID", "Discount", "Status"};
 
 		dtm = new DefaultTableModel(column, 0);
-		Vector<Voucher> vouchers = VoucherHandler.getAllVoucher();
+		Vector<Voucher> vouchers = VoucherHandler.getAllVouchers();
 
 		for (Voucher voucher : vouchers) {
 			rowData = new Vector<>();
