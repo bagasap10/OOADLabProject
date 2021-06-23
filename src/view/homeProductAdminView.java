@@ -12,14 +12,16 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import controller.ProductHandler;
+import controller.TransactionHandler;
 import controller.VoucherHandler;
 
 public class homeProductAdminView extends JFrame implements MenuListener, ActionListener {
 	JMenuBar menuBar;
 	JMenu homeMenu, logoutMenu;
-	JMenuItem productsMenu, vouchersMenu;
+	JMenuItem productsMenu, vouchersMenu, transMenu;
 	productView prodView = null;
 	voucherView vouchView = null;
+	transactionView transView = null;
 	
 	public homeProductAdminView() {
 		menuBar = new JMenuBar();
@@ -47,8 +49,20 @@ public class homeProductAdminView extends JFrame implements MenuListener, Action
 				if(prodView != null) {
 					prodView.dispose();
 				}
-				System.out.println("Employee");
+				System.out.println("Products!");
 				add(prodView = ProductHandler.viewProductManagementForm());
+			}
+		});
+		
+		transMenu = new JMenuItem("Manage Products");
+		transMenu.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(transView != null) {
+					transView.dispose();
+				}
+				System.out.println("Employee");
+				add(transView = TransactionHandler.viewTransactionManagementForm());
 			}
 		});
 		
@@ -78,6 +92,7 @@ public class homeProductAdminView extends JFrame implements MenuListener, Action
 
 		homeMenu.add(productsMenu);
 		homeMenu.add(vouchersMenu);
+		homeMenu.add(transMenu);
 		menuBar.add(homeMenu);
 		menuBar.add(logoutMenu);
 

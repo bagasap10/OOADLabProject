@@ -6,50 +6,63 @@ import java.sql.SQLException;
 import java.util.*;
 
 import connect.Connect;
+import controller.EmployeeHandler;
+import controller.VoucherHandler;
+
 
 public class Transaction {
 
 	private static Connect con = new Connect();
 	
-	private int transactionID;
-	private Date purchaseDate;
-	private int voucherID;
-	private int employeeID;
-	private int totalPrice;
+	private static int transactionID;
+	private static String purchaseDate;
+	private static Voucher voucherID;
+	private static Employee employeeID;
+	private static int totalPrice;
 	
 	public Transaction() {
 		
 	}
 	
-
-
-	public Transaction(int transactionID, Date purchaseDate, int voucherID, int employeeID, int totalPrice) {
+	public Transaction(int transactionID, String purchaseDate, Voucher voucherID, Employee employeeID, int totalPrice) {
 		super();
 		this.transactionID = transactionID;
 		this.purchaseDate = purchaseDate;
-		this.voucherID = voucherID;
-		this.employeeID = employeeID;
+		this.voucherID = VoucherHandler.getVoucher();
+		this.employeeID = EmployeeHandler.getEmployee();
 		this.totalPrice = totalPrice;
 	}
-
-
-
-	public Vector<Transaction> getAllProducts(){
-		Vector<Transaction> trans = new Vector<>();
+	
+	public static Vector<Transaction> getAllTransactions() {
+		Vector<Transaction> transactions = new Vector<>();
 		try {
 			PreparedStatement ps = Connect.getInstance().prepareStatement("SELECT * FROM transaction");
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
-				int transID = rs.getInt("transactionID");
-				Date date = rs.getDate("purchaseDate");
-				int vouchID = rs.getInt("voucherID");
-				int empID = rs.getInt("employeeID");
-				int price = rs.getInt("totalPrice");
+				int transactionID = rs.getInt("transactionID");
+				String purchaseDate = rs.getString("purchaseDate");
+				Voucher voucherID = VoucherHandler.getVoucher();
+				Employee employeeID = EmployeeHandler.getEmployee();
+				int totalPrice = rs.getInt("totalPrice");
 
-				Transaction tran = new Transaction(transID, date, vouchID, empID, price);
-				trans.add(tran);
+				Transaction transaction = new Transaction(transactionID, purchaseDate, voucherID, employeeID, totalPrice);
+				transactions.add(transaction);
 			}
-			return trans;
+			return transactions;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static Transaction getTransaction() {
+		try {
+			PreparedStatement ps = Connect.getInstance().prepareStatement("SELECT * FROM transaction WHERE transactionID = ?");
+			ps.setInt(1, transactionID);
+
+			Transaction transaction = new Transaction(transactionID, purchaseDate, voucherID, employeeID, totalPrice);
+			return transaction;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,10 +72,10 @@ public class Transaction {
 	
 	public boolean insertTransaction() {
 		try {
-			PreparedStatement ps = Connect.getInstance().prepareStatement("INSERT INTO transaction VALUES(null,?,?,?,?)");
-			ps.setDate(2,  (java.sql.Date) purchaseDate);
-			ps.setInt(2, voucherID);
-			ps.setInt(3, employeeID);
+			PreparedStatement ps = Connect.getInstance().prepareStatement("INSERT INTO voucher VALUES(null,?,?,?,?)");
+			ps.setString(1, purchaseDate);
+			VoucherHandler.getVoucher();
+			EmployeeHandler.getEmployee();
 			ps.setInt(4, totalPrice);
 
 			return ps.executeUpdate() == 1;
@@ -73,99 +86,188 @@ public class Transaction {
 		return false;
 	}
 	
-	public static Transaction getTransactionDetail() {
-		Transaction trans = new Transaction();
-		
+	public boolean deleteTransaction() {
 		try {
-			con.rs = con.execQuery("SELECT * FROM Employee WHERE ID = " + transactionID);
-			
-			if(con.rs.next() == true) {
-				trans.setTransactionID(con.rs.getInt("transactionID"));
-				trans.setPurchaseDate(con.rs.getDate("purchaseDate"));
-				trans.setVoucherID(con.rs.getInt("voucherID"));
-				trans.setEmployeeID(con.rs.getInt("employeeID"));
-				trans.setTotalPrice(con.rs.getInt("price"));
-			}
-		}
-		
-		catch(Exception e) {
-			return null;
-		}
-		return trans;
-	}
+			PreparedStatement ps = Connect.getInstance().prepareStatement("DELETE FROM transaction WHERE transactionID = ?");
+			ps.setInt(1,transactionID);
 
-	/**
-	 * @return the transactionID
-	 */
+			return ps.executeUpdate() == 1;
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return false;
+	}
+	
 	public int getTransactionID() {
 		return transactionID;
 	}
-
-	/**
-	 * @param transactionID the transactionID to set
-	 */
+	
 	public void setTransactionID(int transactionID) {
 		this.transactionID = transactionID;
 	}
-
-	/**
-	 * @return the purchaseDate
-	 */
-	public Date getPurchaseDate() {
+	
+	public String getPurchaseDate() {
 		return purchaseDate;
 	}
-
-	/**
-	 * @param purchaseDate the purchaseDate to set
-	 */
-	public void setPurchaseDate(Date purchaseDate) {
+	
+	public void setPurchaseDate(String purchaseDate) {
 		this.purchaseDate = purchaseDate;
 	}
-
-	/**
-	 * @return the voucherID
-	 */
-	public int getVoucherID() {
+	
+	public Voucher getVoucherID() {
 		return voucherID;
 	}
-
-	/**
-	 * @param voucherID the voucherID to set
-	 */
-	public void setVoucherID(int voucherID) {
+	
+	public void setVoucherID(Voucher voucherID) {
 		this.voucherID = voucherID;
 	}
-
-	/**
-	 * @return the employeeID
-	 */
-	public int getEmployeeID() {
+	
+	public Employee getEmployeeID() {
 		return employeeID;
 	}
-
-	/**
-	 * @param employeeID the employeeID to set
-	 */
-	public void setEmployeeID(int employeeID) {
+	
+	public void setEmployeeID(Employee employeeID) {
 		this.employeeID = employeeID;
 	}
-
-	/**
-	 * @return the totalPrice
-	 */
+	
 	public int getTotalPrice() {
 		return totalPrice;
 	}
-
-	/**
-	 * @param totalPrice the totalPrice to set
-	 */
+	
 	public void setTotalPrice(int totalPrice) {
 		this.totalPrice = totalPrice;
 	}
-	
-	
+
+	public boolean insertNewTransaction() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean updateTransaction() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
+	
+//	public static List<Transaction> getAllTransaction() {
+//		List<Transaction> listTransaction = new ArrayList<Transaction>();
+//		
+//		try {
+//			con.rs = con.execQuery("SELECT * FROM Transaction");
+//			
+//			while(con.rs.next() == true) {
+//				Transaction trans = new Transaction();
+//				
+//				trans.setTransactionID(con.rs.getInt("transactionID"));
+//				trans.setPurchaseDate(con.rs.getDate("purchaseDate"));
+//				trans.setVoucherID(con.rs.getInt("voucherID"));
+//				trans.setEmployeeID(con.rs.getInt("employeeID"));
+//				trans.setTotalPrice(con.rs.getInt("price"));
+//
+//			}
+//		}
+//		
+//		catch (Exception e) {
+//			return null;
+//		}
+//		
+//		return listTransaction;
+//	}
+//	
+//	public static Transaction getTransactionDetail() {
+//		Transaction trans = new Transaction();
+//		
+//		try {
+//			con.rs = con.execQuery("SELECT * FROM Employee WHERE ID = " + transactionID);
+//			
+//			if(con.rs.next() == true) {
+//				trans.setTransactionID(con.rs.getInt("transactionID"));
+//				trans.setPurchaseDate(con.rs.getDate("purchaseDate"));
+//				trans.setVoucherID(con.rs.getInt("voucherID"));
+//				trans.setEmployeeID(con.rs.getInt("employeeID"));
+//				trans.setTotalPrice(con.rs.getInt("price"));
+//			}
+//		}
+//		
+//		catch(Exception e) {
+//			return null;
+//		}
+//		return trans;
+//	}
+//
+//	/**
+//	 * @return the transactionID
+//	 */
+//	public int getTransactionID() {
+//		return transactionID;
+//	}
+//
+//	/**
+//	 * @param transactionID the transactionID to set
+//	 */
+//	public void setTransactionID(int transactionID) {
+//		this.transactionID = transactionID;
+//	}
+//
+//	/**
+//	 * @return the purchaseDate
+//	 */
+//	public Date getPurchaseDate() {
+//		return purchaseDate;
+//	}
+//
+//	/**
+//	 * @param purchaseDate the purchaseDate to set
+//	 */
+//	public void setPurchaseDate(Date purchaseDate) {
+//		this.purchaseDate = purchaseDate;
+//	}
+//
+//	/**
+//	 * @return the voucherID
+//	 */
+//	public int getVoucherID() {
+//		return voucherID;
+//	}
+//
+//	/**
+//	 * @param voucherID the voucherID to set
+//	 */
+//	public void setVoucherID(int voucherID) {
+//		this.voucherID = voucherID;
+//	}
+//
+//	/**
+//	 * @return the employeeID
+//	 */
+//	public int getEmployeeID() {
+//		return employeeID;
+//	}
+//
+//	/**
+//	 * @param employeeID the employeeID to set
+//	 */
+//	public void setEmployeeID(int employeeID) {
+//		this.employeeID = employeeID;
+//	}
+//
+//	/**
+//	 * @return the totalPrice
+//	 */
+//	public int getTotalPrice() {
+//		return totalPrice;
+//	}
+//
+//	/**
+//	 * @param totalPrice the totalPrice to set
+//	 */
+//	public void setTotalPrice(int totalPrice) {
+//		this.totalPrice = totalPrice;
+//	}
+//	
+//	
+//}
 
 /*
  * import java.util.Date;
@@ -366,3 +468,4 @@ public class Transaction {
 	}
 }
 */
+
