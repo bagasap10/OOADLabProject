@@ -13,6 +13,7 @@ import connect.Connect;
 import controller.CartHandler;
 import controller.EmployeeHandler;
 import controller.ProductHandler;
+import model.CartItem;
 import model.Employee;
 import model.Product;
 
@@ -25,7 +26,7 @@ public class checkoutView extends JInternalFrame implements MouseListener, Actio
 	JLabel id, name, desc, price, stock;
 	Vector<Object> rowData;
 	JTextField idField, nameField, descField, priceField, stockField;
-	JButton insertBtn, updateBtn, deleteBtn;
+	JButton insertBtn, updateBtn, deleteBtn, refreshBtn;
 	Connect con;
 
 	public checkoutView() {
@@ -50,9 +51,19 @@ public class checkoutView extends JInternalFrame implements MouseListener, Actio
 		insertBtn = new JButton("Insert");
 		updateBtn = new JButton("Update");
 		deleteBtn = new JButton("Delete");
+		refreshBtn = new JButton("Refresh");
 
 		table = new JTable(dtm);
 		genTable();
+
+		refreshBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				refreshTable();
+			}
+
+		});
 
 		insertBtn.addActionListener(new ActionListener() {
 
@@ -90,20 +101,14 @@ public class checkoutView extends JInternalFrame implements MouseListener, Actio
 				}
 			}
 		});
-		
+
 		deleteBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 				int id = Integer.parseInt(idField.getText());
-				String name = nameField.getText();
-				String description = descField.getText();
-				int price = Integer.parseInt(priceField.getText());
-				int stock = Integer.parseInt(stockField.getText());
-
-				boolean status = ProductHandler.deleteProduct(id);
-				if(status) {					
+				boolean isInserted = CartHandler.removeProductFromCart(id);
+				if(isInserted) {					
 					refreshTable();	
 					System.out.println("Delete Clicked");
 					idField.setText("");
@@ -111,10 +116,10 @@ public class checkoutView extends JInternalFrame implements MouseListener, Actio
 					descField.setText("");
 					priceField.setText("");
 					stockField.setText("");
-					JOptionPane.showMessageDialog(null, "Item has been deleted!");
+					JOptionPane.showMessageDialog(null, "Delete Successful");
 				}
 				else {
-					String message = ProductHandler.errorMsg;
+					String message = CartHandler.errorMsg;
 					JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -133,7 +138,7 @@ public class checkoutView extends JInternalFrame implements MouseListener, Actio
 		scrollPane = new JScrollPane(table);
 		scrollPane.setPreferredSize(new Dimension(1000, 300));
 
-//		northPanel.add(scrollPane);
+		//		northPanel.add(scrollPane);
 		northPanel.add(scrollPane);
 		centerPanel.add(id);
 		centerPanel.add(idField);
@@ -149,6 +154,7 @@ public class checkoutView extends JInternalFrame implements MouseListener, Actio
 		southPanel.add(insertBtn);
 		southPanel.add(updateBtn);
 		southPanel.add(deleteBtn);
+		southPanel.add(refreshBtn);
 
 		this.add(northPanel,BorderLayout.NORTH);
 		this.add(southPanel,BorderLayout.SOUTH);
@@ -159,54 +165,37 @@ public class checkoutView extends JInternalFrame implements MouseListener, Actio
 	}
 
 	public void genTable() {
-		Object[] column = {"ID", "Name", "Description", "Price", "Stock"};
+		Object[] column = {"ID", "Name", "Description", "Price", "Quantity"};
 
 		dtm = new DefaultTableModel(column, 0);
+		Vector<CartItem> cart = CartHandler.getAllProducts();
 
-		//		System.out.println("debug");
-		con.rs = con.execQuery("SELECT * FROM product");
-		//		System.out.println("debug2");
-
-		try {
-			while(con.rs.next()) {
-				rowData = new Vector<>();
-
-				int id = con.rs.getInt("productID");
-				String name = con.rs.getString("name");
-				String desc = con.rs.getString("description");
-				int price = con.rs.getInt("price");
-				int stock = con.rs.getInt("stock");
-
-				rowData.add(id);
-				rowData.add(name);
-				rowData.add(desc);
-				rowData.add(price);
-				rowData.add(stock);
-
-				dtm.addRow(rowData);
-				//				System.out.println("debug3");
-			}
-		}
-		catch(SQLException e1) {
-			e1.printStackTrace();
+		for (CartItem cartItem : cart) {
+			rowData = new Vector<>();
+			rowData.add(cartItem.getProductID());
+			rowData.add(cartItem.getName());
+			rowData.add(cartItem.getDescription());
+			rowData.add(cartItem.getPrice());
+			rowData.add(cartItem.getQuantity());
+			dtm.addRow(rowData);
 		}
 		table.setModel(dtm);
 	}
 
 
 	private void refreshTable() {
-		Object[] column = {"ID", "Name", "Description", "Price", "Stock"};
+		Object[] column = {"ID", "Name", "Description", "Price", "Quantity"};
 
 		dtm = new DefaultTableModel(column, 0);
-		Vector<Product> products = ProductHandler.getAllProducts();
+		Vector<CartItem> cart = CartHandler.getAllProducts();
 
-		for (Product product : products) {
+		for (CartItem cartItem : cart) {
 			rowData = new Vector<>();
-			rowData.add(product.getProductID());
-			rowData.add(product.getName());
-			rowData.add(product.getDescription());
-			rowData.add(product.getPrice());
-			rowData.add(product.getStock());
+			rowData.add(cartItem.getProductID());
+			rowData.add(cartItem.getName());
+			rowData.add(cartItem.getDescription());
+			rowData.add(cartItem.getPrice());
+			rowData.add(cartItem.getQuantity());
 			dtm.addRow(rowData);
 		}
 		table.setModel(dtm);

@@ -26,9 +26,9 @@ public class CartHandler {
 	}
 		
 	
-	public static Vector<Product> getAllProducts(){
-		Product product = new Product();
-		return product.getAllProducts();
+	public static Vector<CartItem> getAllProducts(){
+		CartItem cart = new CartItem();
+		return cart.getAllProducts();
 	}
 	
 	public static Product getProduct() {
@@ -88,11 +88,11 @@ public class CartHandler {
 		return true;
 	}
 	
-	public static boolean deleteProduct(int id) {
-		Product product = new Product();
-		product.setProductID(id);
+	public static boolean removeProductFromCart(int id) {
+		CartItem cart = new CartItem();
+		cart.setProductID(id);
 		
-		if(!product.deleteProduct()) {
+		if(!cart.removeProductFromCart()) {
 			errorMsg="Item has not been deleted!";
 			return false;
 		}

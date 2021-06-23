@@ -97,7 +97,7 @@ public class homePage extends JFrame implements ActionListener {
 				dispose();
 				if(pos == 1) new baristaView();
 				else if(pos == 2) new homeProductAdminView();
-//				else if(pos == 3) new homeManagerView();
+				else if(pos == 3) new homeManagerView();
 				else new homeHRDView();
 				JOptionPane.showMessageDialog(this, "Login Successful");
 			} else {

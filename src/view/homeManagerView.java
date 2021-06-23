@@ -11,60 +11,36 @@ import javax.swing.JOptionPane;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import controller.CartHandler;
 import controller.ProductHandler;
 import controller.TransactionHandler;
 import controller.VoucherHandler;
 
-public class homeProductAdminView extends JFrame implements MenuListener, ActionListener {
+public class homeManagerView extends JFrame implements MenuListener, ActionListener {
 	JMenuBar menuBar;
 	JMenu homeMenu, logoutMenu;
-	JMenuItem productsMenu, vouchersMenu, transMenu;
-	productView prodView = null;
-	voucherView vouchView = null;
+	JMenuItem cartMenu, vouchersMenu, transMenu;
 	transactionView transView = null;
+
 	
-	public homeProductAdminView() {
+	public homeManagerView() {
 		menuBar = new JMenuBar();
 		homeMenu = new JMenu("Home");
 		logoutMenu = new JMenu("Logout");
 		
-		vouchersMenu = new JMenuItem("Manage Vouchers");
-		vouchersMenu.addActionListener(new ActionListener() {
+		cartMenu = new JMenuItem("Manage Transactions");
+		cartMenu.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(vouchView != null) {
-					vouchView.dispose();
+				if(transView != null) {
+					transView.dispose();
 				}
 				System.out.println("Vouchers");
-				add(vouchView = VoucherHandler.viewVoucherManagementForm());
+				add(transView = TransactionHandler.viewTransactionManagementForm());
 			}
 		});
-		
-		productsMenu = new JMenuItem("Manage Products");
-		productsMenu.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(prodView != null) {
-					prodView.dispose();
-				}
-				System.out.println("Products!");
-				add(prodView = ProductHandler.viewProductManagementForm());
-			}
-		});
-		
-//		transMenu = new JMenuItem("Manage Products");
-//		transMenu.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				if(transView != null) {
-//					transView.dispose();
-//				}
-//				System.out.println("Employee");
-//				add(transView = TransactionHandler.viewTransactionManagementForm());
-//			}
-//		});
 		
 		logoutMenu.addMenuListener(new MenuListener() {
 			
@@ -90,16 +66,14 @@ public class homeProductAdminView extends JFrame implements MenuListener, Action
 			}
 		});
 
-		homeMenu.add(productsMenu);
-		homeMenu.add(vouchersMenu);
-//		homeMenu.add(transMenu);
+		homeMenu.add(cartMenu);
 		menuBar.add(homeMenu);
 		menuBar.add(logoutMenu);
 
 		setJMenuBar(menuBar);
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setTitle("Product Dashboard");
+		setTitle("Transaction Dashboard");
 		setSize(1280,720);
 		setLocationRelativeTo(null);
 		setVisible(true);

@@ -61,7 +61,7 @@ public class cartView extends JFrame implements MouseListener, ActionListener {
 					boolean isInserted = CartHandler.addToCart(idField, qty);
 					if(isInserted) {					
 						refreshTable();	
-						System.out.println("insert Clicked");
+						System.out.println("Insert Clicked");
 						quantityField.setText("");
 						JOptionPane.showMessageDialog(null, "Insert Successful");
 					}
@@ -76,9 +76,6 @@ public class cartView extends JFrame implements MouseListener, ActionListener {
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				idField = Integer.parseInt(table.getValueAt(table.getSelectedRow(),0).toString());
-				nameField = table.getValueAt(table.getSelectedRow(),1).toString();
-				descField = table.getValueAt(table.getSelectedRow(),2).toString();
-				priceField = Integer.parseInt(table.getValueAt(table.getSelectedRow(),3).toString());
 				stock = Integer.parseInt(table.getValueAt(table.getSelectedRow(),4).toString());
 			}
 		});
@@ -107,33 +104,16 @@ public class cartView extends JFrame implements MouseListener, ActionListener {
 		Object[] column = {"ID", "Name", "Description", "Price", "Stock"};
 
 		dtm = new DefaultTableModel(column, 0);
+		Vector<Product> products = ProductHandler.getAllProducts();
 
-		//		System.out.println("debug");
-		con.rs = con.execQuery("SELECT * FROM product");
-		//		System.out.println("debug2");
-
-		try {
-			while(con.rs.next()) {
-				rowData = new Vector<>();
-
-				int id = con.rs.getInt("productID");
-				String name = con.rs.getString("name");
-				String desc = con.rs.getString("description");
-				int price = con.rs.getInt("price");
-				int stock = con.rs.getInt("stock");
-
-				rowData.add(id);
-				rowData.add(name);
-				rowData.add(desc);
-				rowData.add(price);
-				rowData.add(stock);
-
-				dtm.addRow(rowData);
-				//				System.out.println("debug3");
-			}
-		}
-		catch(SQLException e1) {
-			e1.printStackTrace();
+		for (Product product : products) {
+			rowData = new Vector<>();
+			rowData.add(product.getProductID());
+			rowData.add(product.getName());
+			rowData.add(product.getDescription());
+			rowData.add(product.getPrice());
+			rowData.add(product.getStock());
+			dtm.addRow(rowData);
 		}
 		table.setModel(dtm);
 	}
